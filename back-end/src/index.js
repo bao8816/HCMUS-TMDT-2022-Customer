@@ -1,0 +1,45 @@
+const express = require('express');
+const passport = require('passport');
+const session = require('express-session');
+const config = require('./config/env_config');
+const cloudinary = require('cloudinary');
+
+const routes = require('./routes/index.route');
+
+const db = require('./config/db');
+db.connect();
+
+const app = express();
+const PORT = 3000 || config.PORT;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Passport config
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.authenticate('session'));
+  
+app.use(function (req, res, next) {
+    res.locals.user = req.user;
+    next();
+});
+
+// Cloudinary config
+cloudinary.config({
+    cloud_name: config.CDN_CLOUD_NAME,
+    api_key: config.CDN_API_KEY,
+    api_secret: config.CDN_API_SECRET
+});
+
+// Route
+routes(app);
+
+// Listen
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(config.CUSTOMER_BASE_URL);
+});
