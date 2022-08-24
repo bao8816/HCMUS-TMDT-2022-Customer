@@ -10,7 +10,7 @@ const db = require('./config/db');
 db.connect();
 
 const app = express();
-const PORT = 3000 || config.PORT;
+const PORT = config.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
