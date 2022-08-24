@@ -22,7 +22,7 @@ passport.use(new LocalStrategy(function verify(username, password, done) {
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-      cb(null, { id: user.id, email: user.email });
+      cb(null, { id: user.id, email: user.email, name: user.name, role: user.role });
     });
   });
   
