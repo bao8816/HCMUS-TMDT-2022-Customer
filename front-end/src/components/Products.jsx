@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { popularProducts } from "../data";
+// import { popularProducts } from "../data";
 import Product from "./Product";
+import productApi from "../services/api/productApi";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
     padding: 20px;
@@ -10,9 +12,20 @@ const Container = styled.div`
 `;
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    productApi.getAllProducts().then((res) => {
+      console.log(res);
+      setProducts(res);
+    }).catch((error) => {
+      console.log(error);
+    })
+  } , []);
+
   return (
     <Container>
-      {popularProducts.map((item) => (
+      {products.map((item) => (
         <Product item={item} key={item.id} />
       ))}
     </Container>
